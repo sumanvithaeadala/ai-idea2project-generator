@@ -3,9 +3,10 @@ import sys
 import traceback
 
 from agent.graph import agent
-
+from agent.tools import init_project_root
 
 def main():
+    init_project_root()
     parser = argparse.ArgumentParser(description="Run engineering project planner")
     parser.add_argument("--recursion-limit", "-r", type=int, default=100,
                         help="Recursion limit for processing (default: 100)")
