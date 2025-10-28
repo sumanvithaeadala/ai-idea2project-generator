@@ -17,6 +17,11 @@ export async function login(formData: FormData) {
   const { error } =  await (await supabase).auth.signInWithPassword(data);
 
   if (error) {
+    if(error.message.includes("Email not confirmed")) {
+      // Optionally redirect to a page explaining email confirmation
+      redirect("/need-confirm-email");
+    }
+    console.log(error.message);
     redirect("/error");
   }
 
@@ -49,7 +54,7 @@ export async function signup(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/login");
 }
 
 export async function signout() {
@@ -80,5 +85,6 @@ export async function signInWithGoogle() {
     redirect("/error");
   }
 
+  console.log(data.url);
   redirect(data.url);
 }
