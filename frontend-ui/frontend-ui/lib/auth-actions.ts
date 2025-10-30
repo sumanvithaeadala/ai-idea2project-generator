@@ -3,18 +3,24 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
 
 export async function login(formData: FormData) {
   const supabase = createClient();
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
-  const data = {
+  const userdata = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   };
 
-  const { error } =  await (await supabase).auth.signInWithPassword(data);
+  const { data, error } =  await (await supabase).auth.signInWithPassword(userdata);
+
+  if (data && data.user) {
+    console.log("User logged in:", data.user.id);
+    (await cookies()).set("user_uuid", data.user.id, { httpOnly: true, path: "/" });
+  }
 
   if (error) {
     if(error.message.includes("Email not confirmed")) {
@@ -24,9 +30,9 @@ export async function login(formData: FormData) {
     console.log(error.message);
     redirect("/error");
   }
-
-  revalidatePath("/", "layout");
-  redirect("/");
+   console.log("Login successful");
+  // revalidatePath("/", "layout");
+  redirect("/get-project");
 }
 
 export async function signup(formData: FormData) {

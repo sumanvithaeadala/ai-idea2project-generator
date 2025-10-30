@@ -59,7 +59,7 @@ def run_cmd(cmd: str, cwd: str = None, timeout: int = 30) -> Tuple[int, str, str
 
 
 def init_project_root():
-    if PROJECT_ROOT.exist():
+    if PROJECT_ROOT.exists():
         shutil.rmtree(PROJECT_ROOT)
     PROJECT_ROOT.mkdir(parents=True, exist_ok=True)
     return str(PROJECT_ROOT)
