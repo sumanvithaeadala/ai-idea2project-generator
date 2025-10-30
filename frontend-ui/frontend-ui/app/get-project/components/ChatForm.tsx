@@ -1,0 +1,154 @@
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Send } from "lucide-react";
+
+type Message = {
+  role: "user" | "assistant";
+  content: string | React.ReactNode;
+};
+
+export default function ChatForm({user_uuid}: {user_uuid?: string}) {
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "assistant", content: "Hi, Please enter your idea" },
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSend = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || loading) return;
+
+    setLoading(true);
+
+    const userMessage: Message = { role: "user", content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: (
+        <span>Thinking<DotLoader /></span>
+      ) },
+    ]);
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/generate_project", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_prompt: input,
+          recursion_limit: 100,
+          user_uuid: user_uuid,
+        }),
+      });
+
+      const data = await response.json();
+
+      let assistantContent: string | React.ReactNode;
+      if (data?.signed_url) {
+        assistantContent = (
+          <span>
+            Here is your project:{" "}
+            <a
+              href={data.signed_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline break-all"
+            >
+              project.zip
+            </a>
+          </span>
+        );
+      } else{
+        assistantContent = "Sorry, something went wrong. Could you please try again after some time?";
+      }
+
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        { role: "assistant", content: assistantContent as any },
+      ]);
+    } catch (error) {
+      console.log("Error fetching response:", error);
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        { role: "assistant", content: "Sorry, something went wrong." },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex h-[100dvh] bg-muted/50 w-full">
+      <div className="w-1/4" />
+      <div className="flex flex-col h-full w-3/4 border rounded-lg shadow-md bg-background">
+       
+        <header className="w-full py-4 px-6 border-b bg-background shadow-sm rounded-t-lg">
+          <h1 className="text-lg font-bold text-center">Idea2Project Genie</h1>
+        </header>
+
+       
+        <ScrollArea className="flex-1 px-4 py-6 overflow-auto">
+          <div className="flex flex-col gap-6 max-w-3xl mx-auto">
+            {messages.map((msg, idx) => (
+              <div
+                key={idx}
+                className={`flex ${
+                  msg.role === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`px-4 py-3 rounded-xl max-w-[80%] text-base shadow-sm ${
+                    msg.role === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-background border"
+                  }`}
+                >
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            <div ref={bottomRef} />
+          </div>
+        </ScrollArea>
+
+        <form
+          onSubmit={handleSend}
+          className="w-full max-w-3xl mx-auto px-4 py-4 border-t bg-background flex gap-2 sticky bottom-0"
+          style={{ zIndex: 10 }} >
+        
+          <Input
+            placeholder="Type your message..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-1"
+            autoFocus
+            disabled={loading} 
+          />
+          <Button type="submit" disabled={!input.trim() || loading} size="icon" className="h-10 w-10">
+            <Send className="h-5 w-5" />
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function DotLoader() {
+  return (
+    <span className="inline-flex gap-0.5 align-baseline">
+      <span className="animate-bounce [animation-delay:-0.32s] align-baseline" style={{ fontSize: "1.3em" }}>.</span>
+      <span className="animate-bounce [animation-delay:-0.16s] align-baseline" style={{ fontSize: "1.3em" }}>.</span>
+      <span className="animate-bounce align-baseline" style={{ fontSize: "1.3em" }}>.</span>
+    </span>
+  );
+}

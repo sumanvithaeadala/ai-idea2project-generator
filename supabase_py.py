@@ -22,7 +22,7 @@ class SupabaseStorageClass:
         curr_request_uuid = generate_random_uuid()
         zip_file_path = f"{local_file_path}.zip"
         folder_to_zip(local_file_path, local_file_path)
-        storage_path = f"{curr_request_uuid}_project.zip"
+        storage_path = f"{user_uuid}/{curr_request_uuid}.zip"
         print(f"Uploading file to Supabase at path: {storage_path}")
         try:
             with open(zip_file_path, "rb") as f:

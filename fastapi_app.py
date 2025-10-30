@@ -5,9 +5,18 @@ from agent.graph import agent
 import traceback
 from supabase_py import SupabaseStorageClass
 from util_functions import convert_string_to_md5
+from fastapi.middleware.cors import CORSMiddleware
+from agent.tools import init_project_root
 
 app = FastAPI(title="Engineering Project Planner API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or specify your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ProjectPromptRequest(BaseModel):
     user_prompt: str
@@ -23,6 +32,7 @@ class ProjectPromptResponse(BaseModel):
 @app.post("/generate_project", response_model=ProjectPromptResponse)
 def generate_project(request: ProjectPromptRequest):
     try:
+        init_project_root()
         request_hash = convert_string_to_md5(request.user_prompt)
         storage = SupabaseStorageClass()
         signed_url = storage.get_signed_url_cache(request_hash, request.user_uuid)

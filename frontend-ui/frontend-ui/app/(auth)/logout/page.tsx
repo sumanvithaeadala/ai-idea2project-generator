@@ -1,13 +1,12 @@
-'use client';
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import React from "react"; 
+import LogOutPage from "./LogOutPage";
 
-const LogoutPage =  () => {
-    const router = useRouter();
-    useEffect(() => {
-        setTimeout(()=> router.push("/"), 2000);
-    }, []);
-  return <div>You have logged out... redirecting in a sec.</div>;
-};
+const LogOut = () => {
+    return (
+        <div className = "flex h-svh items-center" suppressHydrationWarning>
+            <LogOutPage />
+        </div>
+    )
+}
 
-export default LogoutPage;
+export default LogOut;
