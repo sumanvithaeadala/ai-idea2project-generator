@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send } from "lucide-react";
+import UserHistory from "@/app/user-history/page";
+import LogOutPage from "@/app/(auth)/logout/LogOutPage";
 
 type Message = {
   role: "user" | "assistant";
@@ -89,13 +91,24 @@ export default function ChatForm({user_uuid}: {user_uuid?: string}) {
 
   return (
     <div className="flex h-[100dvh] bg-muted/50 w-full">
-      <div className="w-1/4" />
-      <div className="flex flex-col h-full w-3/4 border rounded-lg shadow-md bg-background">
+      <div className="w-1/4"><UserHistory user_uuid={user_uuid} /></div>
+      <div className="flex flex-col h-full w-3/4 border rounded-lg shadow-md bg-background w-full">
        
-        <header className="w-full py-4 px-6 border-b bg-background shadow-sm rounded-t-lg">
-          <h1 className="text-lg font-bold text-center">Idea2Project Genie</h1>
+        <header className="w-full py-4 px-1 border-b bg-background shadow-sm rounded-t-lg">
+          <h1
+            className="text-3xl font-extrabold px-30"
+            style={{
+              fontFamily: "'Lucida Handwriting', 'Lucida Handwriting Italic', 'Comic Sans MS', cursive, sans-serif",
+              letterSpacing: "2px",
+              textShadow: "2px 2px 4px #888, 0 0 2px #000"
+            }}
+          >
+            Idea2Project Genie
+          </h1>
+          <div className="absolute top-4 right-4">
+            <LogOutPage />
+          </div>
         </header>
-
        
         <ScrollArea className="flex-1 px-4 py-6 overflow-auto">
           <div className="flex flex-col gap-6 max-w-3xl mx-auto">
