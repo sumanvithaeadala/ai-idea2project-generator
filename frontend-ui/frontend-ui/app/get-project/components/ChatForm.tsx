@@ -89,71 +89,77 @@ export default function ChatForm({user_uuid}: {user_uuid?: string}) {
     }
   };
 
-  return (
-    <div className="flex h-[100dvh] bg-muted/50 w-full">
-      <div className="w-1/4"><UserHistory user_uuid={user_uuid} /></div>
-      <div className="flex flex-col h-full w-3/4 border rounded-lg shadow-md bg-background w-full">
-       
-        <header className="w-full py-4 px-1 border-b bg-background shadow-sm rounded-t-lg">
-          <h1
-            className="text-3xl font-extrabold px-30"
-            style={{
-              fontFamily: "'Lucida Handwriting', 'Lucida Handwriting Italic', 'Comic Sans MS', cursive, sans-serif",
-              letterSpacing: "2px",
-              textShadow: "2px 2px 4px #888, 0 0 2px #000"
-            }}
-          >
-            Idea2Project Genie
-          </h1>
-          <div className="absolute top-4 right-4">
-            <LogOutPage />
-          </div>
-        </header>
-       
-        <ScrollArea className="flex-1 px-4 py-6 overflow-auto">
-          <div className="flex flex-col gap-6 max-w-3xl mx-auto">
-            {messages.map((msg, idx) => (
+return (
+  <div className="flex h-[100dvh] w-full bg-gradient-to-br from-blue-50 via-blue-100 to-purple-100">
+    <div className="w-1/4">
+      <UserHistory user_uuid={user_uuid} />
+    </div>
+    <div className="flex flex-col h-full w-3/4 border rounded-lg shadow-md bg-gradient-to-br from-blue-50 to-purple-100 w-full">
+      <header className="w-full py-4 px-1 border-b bg-gradient-to-br from-blue-50 to-purple-100 shadow-sm rounded-t-lg">
+        <h1
+          className="text-3xl font-extrabold px-30"
+          style={{
+            fontFamily: "'Lucida Handwriting', 'Lucida Handwriting Italic', 'Comic Sans MS', cursive, sans-serif",
+            letterSpacing: "2px",
+            textShadow: "2px 2px 4px #888, 0 0 2px #000"
+          }}
+        >
+          Idea2Project Genie
+        </h1>
+        <div className="absolute top-4 right-4">
+          <LogOutPage />
+        </div>
+      </header>
+
+      <ScrollArea className="flex-1 px-4 py-6 overflow-auto">
+        <div className="flex flex-col gap-6 max-w-3xl mx-auto">
+          {messages.map((msg, idx) => (
+            <div
+              key={idx}
+              className={`flex ${
+                msg.role === "user" ? "justify-end" : "justify-start"
+              }`}
+            >
               <div
-                key={idx}
-                className={`flex ${
-                  msg.role === "user" ? "justify-end" : "justify-start"
+                className={`px-4 py-3 rounded-xl max-w-[80%] text-base shadow-sm ${
+                  msg.role === "user"
+                    ? "bg-gradient-to-r from-blue-400 to-purple-400 text-white font-semibold"
+                    : "bg-white border text-gray-800"
                 }`}
               >
-                <div
-                  className={`px-4 py-3 rounded-xl max-w-[80%] text-base shadow-sm ${
-                    msg.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-background border"
-                  }`}
-                >
-                  {msg.content}
-                </div>
+                {msg.content}
               </div>
-            ))}
-            <div ref={bottomRef} />
-          </div>
-        </ScrollArea>
+            </div>
+          ))}
+          <div ref={bottomRef} />
+        </div>
+      </ScrollArea>
 
-        <form
-          onSubmit={handleSend}
-          className="w-full max-w-3xl mx-auto px-4 py-4 border-t bg-background flex gap-2 sticky bottom-0"
-          style={{ zIndex: 10 }} >
-        
-          <Input
-            placeholder="Type your message..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1"
-            autoFocus
-            disabled={loading} 
-          />
-          <Button type="submit" disabled={!input.trim() || loading} size="icon" className="h-10 w-10">
-            <Send className="h-5 w-5" />
-          </Button>
-        </form>
-      </div>
+      <form
+        onSubmit={handleSend}
+        className="w-full max-w-3xl mx-auto px-4 py-4 border-t bg-gradient-to-br from-blue-50 to-purple-200 shadow-sm flex gap-2 sticky bottom-0"
+        style={{ zIndex: 10 }}
+      >
+        <Input
+          placeholder="Type your message..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="flex-1 rounded-full px-4 py-2 border-2 border-blue-200 bg-white/90 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition"
+          autoFocus
+          disabled={loading}
+        />
+        <Button
+          type="submit"
+          disabled={!input.trim() || loading}
+          size="icon"
+          className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white shadow-lg hover:from-blue-600 hover:to-purple-600 transition"
+        >
+          <Send className="h-5 w-5" />
+        </Button>
+      </form>
     </div>
-  );
+  </div>
+);
 }
 
 function DotLoader() {
