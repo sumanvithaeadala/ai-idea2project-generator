@@ -1,25 +1,49 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { CheckCircle2Icon } from "lucide-react";
-import Link from "next/link"
+"use client";
 
-export default function ConfirmEmailPage() {
-    return (
-        <div className="flex min-h-screen items-start justify-center">
-            <div className="w-full max-w-xl px-6 mt-[150px]">
-                <Alert>
-                    <CheckCircle2Icon />
-                    <AlertTitle>Email Confirmation Required</AlertTitle>
-                    <AlertDescription>
-                        Your email link is invalid or has expired. Please signup again to receive a new confirmation email.
-                    </AlertDescription>
-                </Alert>
-                <div className="flex flex-wrap items-center gap-10 md:flex-row justify-center mt-6">
-                    <Link href="/signup">
-                        <Button variant="outline">SignUp</Button>
-                    </Link>
-                </div>
-            </div>
-        </div>
-    );
+import { useState } from "react";
+import { sendMagicLink } from "@/lib/auth-actions";
+
+export default function SendConfirmMailAgainPage() {
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSend = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      await sendMagicLink(email);
+      setSent(true);
+    } catch (err: any) {
+      setError("Failed to send confirmation email. Please try again later.");
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-purple-100">
+      <form
+        onSubmit={handleSend}
+        className="bg-white/90 p-8 rounded-2xl shadow-xl flex flex-col gap-4 max-w-md w-full"
+      >
+        <h2 className="text-2xl font-bold text-center mb-2">Resend Confirmation Email</h2>
+        <input
+          type="email"
+          required
+          placeholder="Enter your email"
+          className="border rounded px-4 py-2"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          disabled={sent}
+        />
+        <button
+          type="submit"
+          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 rounded font-semibold disabled:opacity-60"
+          disabled={sent}
+        >
+          {sent ? "Confirmation Email Sent!" : "Send Confirmation Email"}
+        </button>
+        {error && <p className="text-red-500 text-center">{error}</p>}
+      </form>
+    </div>
+  );
 }

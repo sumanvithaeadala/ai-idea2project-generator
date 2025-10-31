@@ -59,7 +59,7 @@ export default function ChatForm({user_uuid}: {user_uuid?: string}) {
       if (data?.signed_url) {
         assistantContent = (
           <span>
-            Here is your project:{" "}
+            Here is your generated project:{" "}
             <a
               href={data.signed_url}
               target="_blank"

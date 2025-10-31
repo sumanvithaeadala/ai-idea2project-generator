@@ -24,11 +24,20 @@ export async function login(formData: FormData) {
 
   if (error) {
     if(error.message.includes("Email not confirmed")) {
-      // Optionally redirect to a page explaining email confirmation
       redirect("/need-confirm-email");
+    }
+    if(error.message.includes("Invalid login credentials")) {
+      console.log("Invalid login credentials provided. Redirecting to signup page.");
+      redirect("/signup");
     }
     console.log(error.message);
     redirect("/error");
+  }
+  else{
+    if(data.user.email_confirmed_at === null) {
+      console.log("Email not confirmed for user:", data.user.email);
+      redirect("/need-confirm-email");
+    }
   }
    console.log("Login successful");
   // revalidatePath("/", "layout");
@@ -58,9 +67,7 @@ export async function signup(formData: FormData) {
   if (error) {
     redirect("/error");
   }
-
-  revalidatePath("/", "layout");
-  redirect("/login");
+  redirect("/need-confirm-email");
 }
 
 export async function signout() {
@@ -82,6 +89,7 @@ export async function signInWithGoogle() {
         access_type: "offline",
         prompt: "consent",
       },
+      redirectTo: process.env.NEXT_PUBLIC_URL+"/get-project", // or your chat page
     },
   });
 
@@ -90,6 +98,22 @@ export async function signInWithGoogle() {
     redirect("/error");
   }
 
-  console.log(data.url);
+  console.log("url value is: ",data.url);
   redirect(data.url);
+}
+
+export async function sendMagicLink(email: string) {
+  const supabase = createClient();
+  const { error } = await (await supabase).auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: process.env.NEXT_PUBLIC_URL + "/get-project", // or your desired redirect
+    },
+  });
+
+  if (error) {
+    console.log(error);
+    redirect("/error");
+  }
+  redirect("/need-confirm-email");
 }

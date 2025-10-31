@@ -36,7 +36,7 @@ export default function UserHistory({ user_uuid }: { user_uuid?: string }) {
           <ScrollArea className="h-[100dvh] w-full">
             <ul className="space-y-3 overflow-y-auto flex-1 pr-2">
               {projects.length > 0
-                ? Array.from({ length: 20 }, (_, i) => projects[0]).map((proj, idx) => (
+                ? projects.map((proj, idx) => (
                     <li key={idx} className="p-2 bg-white rounded-md shadow-sm">
                       <p className="text-sm truncate">{proj.user_prompt || "Untitled Project"}</p>
                       <Link
@@ -44,7 +44,7 @@ export default function UserHistory({ user_uuid }: { user_uuid?: string }) {
                         className="text-blue-500 text-xs underline"
                         target="_blank"
                       >
-                        Download ZIP
+                        Download project
                       </Link>
                       <p className="text-gray-400 text-xs mt-1">
                         {new Date(proj.created_at).toLocaleString()}
