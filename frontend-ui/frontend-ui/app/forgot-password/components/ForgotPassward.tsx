@@ -1,6 +1,4 @@
-"use client";
-
-import { useState, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 
@@ -10,13 +8,27 @@ function ForgotPasswordContent() {
   const [password, setPassword] = useState("");
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sessionReady, setSessionReady] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
+        if (error) {
+          setError("Invalid or expired reset link. Please request a new one.");
+        } else {
+          setSessionReady(true);
+        }
+      });
+    }
+  }, [code]);
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     try {
       const supabase = createClient();
-      const { error } = await (await supabase).auth.updateUser({ password });
+      const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
       setDone(true);
     } catch (err: any) {
@@ -24,17 +36,19 @@ function ForgotPasswordContent() {
     }
   };
 
-  if (code) {
+  if (code && !error && !sessionReady) {
+    return <div>Verifying reset link...</div>;
+  }
+
+  if (code && sessionReady) {
     return (
       <div className="min-h-screen flex flex-col items-start bg-gradient-to-br from-blue-50 to-purple-100 px-4 w-full pt-10">
-        <h1
-          className="text-4xl font-extrabold mb-8 drop-shadow-lg mt-10 ml-4"
+        <h1 className="text-4xl font-extrabold mb-8 drop-shadow-lg mt-10 ml-4"
           style={{
             fontFamily: "'Lucida Handwriting', 'Lucida Handwriting Italic', 'Comic Sans MS', cursive, sans-serif",
             letterSpacing: "2px",
             textShadow: "2px 2px 8px #aaa, 0 0 2px #000"
-          }}
-        >
+          }}>
           Idea2Project Genie
         </h1>
         <form
@@ -63,6 +77,11 @@ function ForgotPasswordContent() {
       </div>
     );
   }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
   return null;
 }
 
