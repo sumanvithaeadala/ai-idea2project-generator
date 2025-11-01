@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send } from "lucide-react";
-import UserHistory from "@/app/user-history/page";
+import UserHistory from "@/app/user-history/components/UserHistory";
 import LogOutPage from "@/app/(auth)/logout/LogOutPage";
 
 type Message = {
