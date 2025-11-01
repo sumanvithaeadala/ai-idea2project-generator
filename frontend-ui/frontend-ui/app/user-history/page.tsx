@@ -1,5 +1,6 @@
 "use client";
-import UserHistory from "@/app/user-history/components/UserHistory";
+
+import UserHistory from "./components/UserHistory";
 
 export default function UserHistoryPage() {
   return (
