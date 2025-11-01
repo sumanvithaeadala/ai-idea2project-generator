@@ -24,7 +24,17 @@ llm6 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_
 llm7 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY7") )
 llm8 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY8") )
 llm9 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY9") )
-llm10 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY10") )
+llm10 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY10"))
+llm11 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY11") )
+llm12 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY12") )
+llm13 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY13") )
+llm14 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY14") )
+llm15 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY15") )
+llm16 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY16") )
+llm17 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY17") )
+llm18 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY18") )
+llm19 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY19") )
+llm20 = ChatGroq(model="openai/gpt-oss-120b", groq_api_key = os.getenv("GROQ_API_kEY20") )
 
 
 
@@ -109,7 +119,27 @@ def invoke_with_llms_for_planner(prompt: str, output_model) -> object:
             elif current_llm == llm9:
                 current_llm = llm10
             elif current_llm == llm10:
-                raise RuntimeError("All LLMs failed.")  # Stop if all LLMs fail
+                current_llm = llm11
+            elif current_llm == llm11:
+                current_llm = llm12
+            elif current_llm == llm12:
+                current_llm = llm13
+            elif current_llm == llm13:
+                current_llm = llm14
+            elif current_llm == llm14:
+                current_llm = llm15
+            elif current_llm == llm15:
+                current_llm = llm16
+            elif current_llm == llm16:
+                current_llm = llm17
+            elif current_llm == llm17:
+                current_llm = llm18
+            elif current_llm == llm18:
+                current_llm = llm19
+            elif current_llm == llm19:
+                current_llm = llm20
+            elif current_llm == llm20:
+                raise RuntimeError("All LLMs failed.")
 
 
 def invoke_with_llms_for_architect(prompt: str, output_model) -> object:
@@ -143,7 +173,27 @@ def invoke_with_llms_for_architect(prompt: str, output_model) -> object:
             elif current_llm == llm9:
                 current_llm = llm10
             elif current_llm == llm10:
-                raise RuntimeError("All LLMs failed.")  # Stop if all LLMs fail
+                current_llm = llm11
+            elif current_llm == llm11:
+                current_llm = llm12
+            elif current_llm == llm12:
+                current_llm = llm13
+            elif current_llm == llm13:
+                current_llm = llm14
+            elif current_llm == llm14:
+                current_llm = llm15
+            elif current_llm == llm15:
+                current_llm = llm16
+            elif current_llm == llm16:
+                current_llm = llm17
+            elif current_llm == llm17:
+                current_llm = llm18
+            elif current_llm == llm18:
+                current_llm = llm19
+            elif current_llm == llm19:
+                current_llm = llm20
+            elif current_llm == llm20:
+                raise RuntimeError("All LLMs failed.")
 
 
 def invoke_with_llms_for_coder(system_prompt: str, user_prompt: str, coder_tools: list) -> None:
@@ -177,7 +227,27 @@ def invoke_with_llms_for_coder(system_prompt: str, user_prompt: str, coder_tools
             elif current_llm == llm9:
                 current_llm = llm10
             elif current_llm == llm10:
-                raise RuntimeError("All LLMs failed.")  # Stop if all LLMs fail
+                current_llm = llm11
+            elif current_llm == llm11:
+                current_llm = llm12
+            elif current_llm == llm12:
+                current_llm = llm13
+            elif current_llm == llm13:
+                current_llm = llm14
+            elif current_llm == llm14:
+                current_llm = llm15
+            elif current_llm == llm15:
+                current_llm = llm16
+            elif current_llm == llm16:
+                current_llm = llm17
+            elif current_llm == llm17:
+                current_llm = llm18
+            elif current_llm == llm18:
+                current_llm = llm19
+            elif current_llm == llm19:
+                current_llm = llm20
+            elif current_llm == llm20:
+                raise RuntimeError("All LLMs failed.")
 
 
 graph = StateGraph(dict)

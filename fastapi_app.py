@@ -42,8 +42,23 @@ def generate_project(request: ProjectPromptRequest):
             {"user_prompt": request.user_prompt},
             {"recursion_limit": request.recursion_limit}
         )
-        new_signed_url = storage.upload_project_zip_and_get_signedurl(request.user_uuid,request_hash, "./generated_project")
+        new_signed_url = storage.upload_project_zip_and_get_signedurl(request.user_uuid,request_hash,request.user_prompt, "./generated_project")
         return {"final_state": result, "signed_url": new_signed_url}
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/projects")
+def get_user_projects(user_uuid: str):
+    try:
+        supabase = SupabaseStorageClass()
+        response = supabase.get_user_history_details(user_uuid)
+        projects = response
+        print("Fetched projects:", projects)
+        if not projects:
+            return {"data": []}
+        return {"data": projects}
+    except Exception as e:
+        print("Error fetching projects:", e)
+        raise HTTPException(status_code=500, detail="Failed to fetch user projects")

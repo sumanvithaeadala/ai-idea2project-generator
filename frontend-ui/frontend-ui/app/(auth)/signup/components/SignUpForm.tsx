@@ -14,7 +14,19 @@ import { signup } from "@/lib/auth-actions";
 
 export function SignUpForm() {
   return (
-    <Card className="mx-auto max-w-sm">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-100 px-4 w-full">
+      <h1
+        className="text-4xl font-extrabold mb-8 drop-shadow-lg"
+        style={{
+          fontFamily: "'Lucida Handwriting', 'Lucida Handwriting Italic', 'Comic Sans MS', cursive, sans-serif",
+          letterSpacing: "2px",
+          textShadow: "2px 2px 8px #aaa, 0 0 2px #000"
+        }}
+      >
+        Idea2Project Genie
+      </h1>
+
+       <Card className="mx-auto max-w-sm">
       <CardHeader>
         <CardTitle className="text-xl">Sign Up</CardTitle>
         <CardDescription>
@@ -71,5 +83,6 @@ export function SignUpForm() {
         </div>
       </CardContent>
     </Card>
+      </div>
   );
 }

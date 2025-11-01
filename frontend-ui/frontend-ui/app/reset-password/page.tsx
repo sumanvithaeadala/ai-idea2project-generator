@@ -1,26 +1,26 @@
 "use client";
-
 import { useState } from "react";
-import { sendMagicLink } from "@/lib/auth-actions";
+import { sendPasswordReset } from "@/lib/auth-actions";
 
-export default function SendConfirmMailAgainPage() {
+export default function ResetPasswordPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSend = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     try {
-      await sendMagicLink(email);
+      await sendPasswordReset(email);
       setSent(true);
-    } catch (err: any) {
-      setError("Failed to send confirmation email. Please try again later.");
+    } catch {
+      setError("Failed to send reset email. Please try again.");
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-blue-50 to-purple-100 px-4 w-full py-40">
+      
+   <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-blue-50 to-purple-100 px-4 w-full py-40">
       <h1
         className="text-4xl font-extrabold mb-8 drop-shadow-lg"
         style={{
@@ -31,11 +31,8 @@ export default function SendConfirmMailAgainPage() {
       >
         Idea2Project Genie
       </h1>
-      <form
-        onSubmit={handleSend}
-        className="bg-white/90 p-8 rounded-2xl shadow-xl flex flex-col gap-4 max-w-md w-full"
-      >
-        <h2 className="text-2xl font-bold text-center mb-2">Resend Confirmation Email</h2>
+      <form onSubmit={handleSubmit} className="bg-white/90 p-8 rounded-2xl shadow-xl flex flex-col gap-4 max-w-md w-full">
+        <h2 className="text-2xl font-bold text-center mb-2">Reset Password</h2>
         <input
           type="email"
           required
@@ -50,7 +47,7 @@ export default function SendConfirmMailAgainPage() {
           className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 rounded font-semibold disabled:opacity-60"
           disabled={sent}
         >
-          {sent ? "Confirmation Email Sent!" : "Send Confirmation Email"}
+          {sent ? "Reset Email Sent!" : "Send Reset Email"}
         </button>
         {error && <p className="text-red-500 text-center">{error}</p>}
       </form>
