@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 
-export default function ForgotPassword() {
+function ForgotPasswordContent() {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
   const [password, setPassword] = useState("");
@@ -26,9 +26,9 @@ export default function ForgotPassword() {
 
   if (code) {
     return (
-      <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-blue-50 to-purple-100 px-4 w-full py-40">
+      <div className="min-h-screen flex flex-col items-start bg-gradient-to-br from-blue-50 to-purple-100 px-4 w-full pt-10">
         <h1
-          className="text-4xl font-extrabold mb-8 drop-shadow-lg"
+          className="text-4xl font-extrabold mb-8 drop-shadow-lg mt-10 ml-4"
           style={{
             fontFamily: "'Lucida Handwriting', 'Lucida Handwriting Italic', 'Comic Sans MS', cursive, sans-serif",
             letterSpacing: "2px",
@@ -63,4 +63,13 @@ export default function ForgotPassword() {
       </div>
     );
   }
+  return null;
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ForgotPasswordContent />
+    </Suspense>
+  );
 }
