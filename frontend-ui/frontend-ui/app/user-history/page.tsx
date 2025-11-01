@@ -1,13 +1,21 @@
-"use client";
-
+import React from "react";
 import UserHistory from "./components/UserHistory";
+import { cookies } from "next/headers";
+import { User } from "lucide-react";
 
-export default function UserHistoryPage() {
+async function getUserId() {
+  const userId = (await cookies()).get("user_uuid")?.value;
+  return userId;
+}
+
+const UserHistoryPage = async () => {
+  const userId = await getUserId();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 flex items-start">
-      <div className="w-full">
-        <UserHistory />
-      </div>
+    <div className="flex h-svh items-center" suppressHydrationWarning>
+      <UserHistory user_uuid={userId} />
     </div>
   );
-}
+};
+
+export default UserHistoryPage;

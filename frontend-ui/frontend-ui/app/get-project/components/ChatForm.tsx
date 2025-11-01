@@ -43,7 +43,7 @@ export default function ChatForm({user_uuid}: {user_uuid?: string}) {
     ]);
 
     try {
-      const response = await fetch(process.env.NEXT_BACKEND_URL + "/generate_project", {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/generate_project", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
