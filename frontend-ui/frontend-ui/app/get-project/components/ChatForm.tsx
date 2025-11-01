@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send } from "lucide-react";
-import UserHistory from "@/app/user-history/page";
+import UserHistory from "@/app/user-history/components/UserHistory";
 import LogOutPage from "@/app/(auth)/logout/LogOutPage";
 
 type Message = {
@@ -43,7 +43,7 @@ export default function ChatForm({user_uuid}: {user_uuid?: string}) {
     ]);
 
     try {
-      const response = await fetch(process.env.NEXT_BACKEND_URL + "/generate_project", {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/generate_project", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
