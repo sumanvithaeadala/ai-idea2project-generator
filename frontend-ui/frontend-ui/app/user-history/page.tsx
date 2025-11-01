@@ -11,7 +11,7 @@ export default function UserHistory({ user_uuid }: { user_uuid?: string }) {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const res = await fetch(`${process.env.NEXT_BACKEND_URL}/projects?user_uuid=${user_uuid}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/projects?user_uuid=${user_uuid}`);
         const data = await res.json();
         setProjects(data.data || []);
       } catch (err) {
