@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +14,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/lib/auth-actions";
 import SignInWithGoogleButton from "./SignInWithGoogleButton";
-import LogOutPage from "@/app/(auth)/logout/LogOutPage";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault();
+  setError(null);
+  const formData = new FormData(e.currentTarget);
+  const result = await login(formData);
+  if (result?.error) {
+    if (result.error === "Email not confirmed") {
+      router.push("/need-confirm-email");
+    } else {
+      setError(result.error);
+    }
+  } else {
+    router.push("/get-project");
+  }
+}
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-100 px-4 w-full">
       <h1
@@ -34,7 +56,13 @@ export function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action="" className="space-y-6">
+          {/* Show error alert if exists */}
+          {error && (
+            <div className="mb-4 text-red-600 text-center font-semibold">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -50,7 +78,7 @@ export function LoginForm() {
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <Link href="#" className="ml-auto inline-block text-sm underline text-blue-500 hover:text-blue-700 transition">
+                  <Link href="/reset-password" className="ml-auto inline-block text-sm underline text-blue-500 hover:text-blue-700 transition">
                     Forgot your password?
                   </Link>
                 </div>
@@ -62,7 +90,7 @@ export function LoginForm() {
                   className="focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
                 />
               </div>
-              <Button type="submit" formAction={login} className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold shadow hover:from-blue-600 hover:to-purple-600 transition">
+              <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold shadow hover:from-blue-600 hover:to-purple-600 transition">
                 Login
               </Button>
               <div className="flex items-center my-2">

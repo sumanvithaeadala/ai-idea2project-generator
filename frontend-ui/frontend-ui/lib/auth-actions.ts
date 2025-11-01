@@ -23,25 +23,21 @@ export async function login(formData: FormData) {
   }
 
   if (error) {
-    if(error.message.includes("Email not confirmed")) {
-      redirect("/need-confirm-email");
+    if (error.message.includes("Email not confirmed")) {
+      return { error: "Email not confirmed" };
     }
-    if(error.message.includes("Invalid login credentials")) {
-      console.log("Invalid login credentials provided. Redirecting to signup page.");
-      redirect("/signup");
+    if (error.message.includes("Invalid login credentials")) {
+      console.log("Invalid login credentials provided.");
+      return { error: "Invalid Credentials!" };
     }
     console.log(error.message);
-    redirect("/error");
-  }
-  else{
-    if(data.user.email_confirmed_at === null) {
-      console.log("Email not confirmed for user:", data.user.email);
-      redirect("/need-confirm-email");
-    }
-  }
-   console.log("Login successful");
+    return { error: "Login failed. Please try again." };
+  } 
+  
+  console.log("Login successful");
+  (await cookies()).set("user_uuid", data.user.id, { httpOnly: true, path: "/" });
   // revalidatePath("/", "layout");
-  redirect("/get-project");
+  return { success: true };
 }
 
 export async function signup(formData: FormData) {
@@ -116,4 +112,15 @@ export async function sendMagicLink(email: string) {
     redirect("/error");
   }
   redirect("/need-confirm-email");
+}
+
+export async function sendPasswordReset(email: string) {
+  const supabase = createClient();
+  const { error } = await (await supabase).auth.resetPasswordForEmail(email, {
+    redirectTo: process.env.NEXT_PUBLIC_URL + "/forgot-password",
+  });
+  if (error) {
+    console.log(error);
+    redirect("/error");
+  }
 }
