@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import localFont from "next/font/local";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -10,6 +11,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const lucida = localFont({
+  src: "../public/fonts/LucidaHandwriting.woff2",
+  preload: true,
+  display: "block",
+  variable: "--font-lucida",
 });
 
 export const metadata: Metadata = {
@@ -24,8 +32,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preload" href="/fonts/LucidaHandwriting.woff2" as="font" type="font/woff2" crossOrigin="anonymous"></link>
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${lucida.variable} antialiased`}
       >
         {children}
       </body>
