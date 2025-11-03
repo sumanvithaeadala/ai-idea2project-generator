@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send } from "lucide-react";
 import UserHistory from "../../user-history/components/UserHistory";
 import LogOutPage from "@/app/(auth)/logout/LogOutPage";
+import { useRouter } from "next/navigation";
 
 type Message = {
   role: "user" | "assistant";
@@ -14,6 +15,17 @@ type Message = {
 };
 
 export default function ChatForm({user_uuid}: {user_uuid?: string}) {
+  const router = useRouter();
+  useEffect(() => {
+    if (!user_uuid) {
+      router.push("/login");
+    }
+  }, [user_uuid, router]);
+
+  if(!user_uuid){
+    return null;
+  }
+
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: "Hi, Please enter your idea" },
   ]);

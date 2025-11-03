@@ -69,6 +69,7 @@ export async function signup(formData: FormData) {
 export async function signout() {
   const supabase = createClient();
   const { error } =await (await supabase).auth.signOut();
+  (await cookies()).set("user_uuid", "", { httpOnly: true, path: "/", maxAge: 0 });
   if (error) {
     console.log(error);
     redirect("/error");
