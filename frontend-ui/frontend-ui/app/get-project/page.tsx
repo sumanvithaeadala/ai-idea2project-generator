@@ -9,6 +9,7 @@ async function getUserId() {
 
 const ChatPage = async () => {
   const userId = await getUserId();
+  console.log("User ID in ChatPage:", userId);
 
   return (
     <div className="flex h-svh items-center" suppressHydrationWarning>

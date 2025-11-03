@@ -16,6 +16,7 @@ type Message = {
 
 export default function ChatForm({user_uuid}: {user_uuid?: string}) {
   const router = useRouter();
+  console.log("ChatForm received user_uuid:", user_uuid);
   useEffect(() => {
     if (!user_uuid) {
       router.push("/login");
