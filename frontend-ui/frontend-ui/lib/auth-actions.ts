@@ -69,6 +69,7 @@ export async function signup(formData: FormData) {
 export async function signout() {
   const supabase = createClient();
   const { error } =await (await supabase).auth.signOut();
+  (await cookies()).set("user_uuid", "", { httpOnly: true, path: "/", maxAge: 0 });
   if (error) {
     console.log(error);
     redirect("/error");
@@ -94,6 +95,7 @@ export async function signInWithGoogle() {
     redirect("/error");
   }
 
+  console.log("Redirect url: ", process.env.NEXT_PUBLIC_URL+"/get-project");
   console.log("url value is: ",data.url);
   redirect(data.url);
 }
