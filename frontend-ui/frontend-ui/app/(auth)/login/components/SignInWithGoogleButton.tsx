@@ -10,7 +10,7 @@ const SignInWithGoogleButton = () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/get-project`,
+        redirectTo: `${process.env.NEXT_PUBLIC_URL}/get-project`,
         queryParams: {
           access_type: "offline",
           prompt: "consent",
