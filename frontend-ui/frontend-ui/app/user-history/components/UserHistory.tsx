@@ -38,7 +38,7 @@ export default function UserHistory({user_uuid}: {user_uuid?: string}) {
               {projects.length > 0
                 ? projects.map((proj, idx) => (
                     <li key={idx} className="p-2 bg-white rounded-md shadow-sm">
-                      <p className="text-sm truncate">{proj.user_prompt || "Untitled Project"}</p>
+                      <p className="text-sm break-words whitespace-pre-line">{proj.user_prompt || "Untitled Project"}</p>
                       <Link
                         href={proj.signed_url}
                         className="text-blue-500 text-xs underline"
