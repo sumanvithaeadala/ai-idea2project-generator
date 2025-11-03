@@ -94,6 +94,7 @@ export async function signInWithGoogle() {
     redirect("/error");
   }
 
+  console.log("Redirect url: ", process.env.NEXT_PUBLIC_URL+"/get-project");
   console.log("url value is: ",data.url);
   redirect(data.url);
 }
