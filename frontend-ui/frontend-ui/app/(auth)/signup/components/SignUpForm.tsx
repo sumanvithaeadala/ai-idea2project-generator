@@ -14,7 +14,7 @@ import { signup } from "@/lib/auth-actions";
 
 export function SignUpForm() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-100 px-4 w-full">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-blue-100 to-purple-100 px-4 w-full">
       <h1
         className="text-4xl font-extrabold mb-8 drop-shadow-lg"
         style={{
@@ -26,63 +26,63 @@ export function SignUpForm() {
         Idea2Project Genie
       </h1>
 
-       <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-xl">Sign Up</CardTitle>
-        <CardDescription>
-          Enter your information to create an account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form action="">
-          <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
+      <Card className="mx-auto max-w-sm w-full shadow-2xl rounded-2xl border-0 bg-white/90">
+        <CardHeader>
+          <CardTitle className="text-xl">Sign Up</CardTitle>
+          <CardDescription>
+            Enter your information to create an account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action="">
+            <div className="grid gap-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="first-name">First name</Label>
+                  <Input
+                    name="first-name"
+                    id="first-name"
+                    placeholder="Max"
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="last-name">Last name</Label>
+                  <Input
+                    name="last-name"
+                    id="last-name"
+                    placeholder="Robinson"
+                    required
+                  />
+                </div>
+              </div>
               <div className="grid gap-2">
-                <Label htmlFor="first-name">First name</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
-                  name="first-name"
-                  id="first-name"
-                  placeholder="Max"
+                  name="email"
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
                   required
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="last-name">Last name</Label>
-                <Input
-                  name="last-name"
-                  id="last-name"
-                  placeholder="Robinson"
-                  required
-                />
+                <Label htmlFor="password">Password</Label>
+                <Input name="password" id="password" type="password" />
               </div>
+              <Button formAction={signup} type="submit" className="w-full bg-gradient-to-br from-blue-500 to-purple-500 text-white shadow-lg hover:from-blue-600 hover:to-purple-600 transition">
+                Create an account
+              </Button>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                name="email"
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input name="password" id="password" type="password" />
-            </div>
-            <Button formAction={signup} type="submit" className="w-full">
-              Create an account
-            </Button>
+          </form>
+          <div className="mt-4 text-center text-sm">
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
+              Sign in
+            </Link>
           </div>
-        </form>
-        <div className="mt-4 text-center text-sm">
-          Already have an account?{" "}
-          <Link href="/login" className="underline">
-            Sign in
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
-      </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
