@@ -42,12 +42,13 @@ export default function ChatForm() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (checkingUser) {
-    return null;
-  }
+  useEffect(() => {
+    if (!checkingUser && !user_uuid) {
+      router.push("/login");
+    }
+  }, [checkingUser, user_uuid, router]);
 
-  if (!user_uuid) {
-    router.replace("/login");
+  if (!user_uuid || checkingUser) {
     return null;
   }
 
