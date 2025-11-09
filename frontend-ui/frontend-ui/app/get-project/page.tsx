@@ -1,21 +1,9 @@
 import React from "react";
 import ChatForm from "./components/ChatForm";
-import { cookies } from "next/headers";
-
-async function getUserId() {
-  const userId = (await cookies()).get("user_uuid")?.value;
-  return userId;
-}
-
-const ChatPage = async () => {
-  const userId = await getUserId();
-  console.log("User ID in ChatPage:", userId);
-
-  return (
-    <div className="flex h-svh items-center" suppressHydrationWarning>
-      <ChatForm user_uuid={userId} />
-    </div>
-  );
-};
+const ChatPage = () => (
+  <div className="flex h-svh items-center" suppressHydrationWarning>
+    <ChatForm />
+  </div>
+);
 
 export default ChatPage;
