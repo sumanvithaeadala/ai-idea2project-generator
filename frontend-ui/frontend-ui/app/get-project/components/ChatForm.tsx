@@ -43,11 +43,7 @@ export default function ChatForm() {
   }, [messages]);
 
   if (checkingUser) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <span className="text-lg text-gray-500">Loading...</span>
-      </div>
-    );
+    return null;
   }
 
   if (!user_uuid) {
