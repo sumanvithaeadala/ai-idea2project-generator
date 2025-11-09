@@ -8,24 +8,18 @@ import { Send } from "lucide-react";
 import UserHistory from "../../user-history/components/UserHistory";
 import LogOutPage from "@/app/(auth)/logout/LogOutPage";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 
 type Message = {
   role: "user" | "assistant";
   content: string | React.ReactNode;
 };
 
-export default function ChatForm({user_uuid}: {user_uuid?: string}) {
+export default function ChatForm() {
+  
   const router = useRouter();
-  console.log("ChatForm received user_uuid:", user_uuid);
-  useEffect(() => {
-    if (!user_uuid) {
-      router.push("/login");
-    }
-  }, [user_uuid, router]);
-
-  if(!user_uuid){
-    return null;
-  }
+  const [user_uuid, setUserUuid] = useState<string | null>(null);
+  const [checkingUser, setCheckingUser] = useState(true);
 
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: "Hi, Please enter your idea" },
@@ -35,8 +29,31 @@ export default function ChatForm({user_uuid}: {user_uuid?: string}) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        setUserUuid(data.user.id);
+      }
+      setCheckingUser(false);
+    });
+  }, []);
+
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  if (checkingUser) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <span className="text-lg text-gray-500">Loading...</span>
+      </div>
+    );
+  }
+
+  if (!user_uuid) {
+    router.replace("/login");
+    return null;
+  }
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,21 +67,30 @@ export default function ChatForm({user_uuid}: {user_uuid?: string}) {
 
     setMessages((prev) => [
       ...prev,
-      { role: "assistant", content: (
-        <span>Thinking<DotLoader /></span>
-      ) },
+      {
+        role: "assistant",
+        content: (
+          <span>
+            Thinking
+            <DotLoader />
+          </span>
+        ),
+      },
     ]);
 
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/generate_project", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_prompt: input,
-          recursion_limit: 100,
-          user_uuid: user_uuid,
-        }),
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/generate_project",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_prompt: input,
+            recursion_limit: 100,
+            user_uuid: user_uuid,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -83,8 +109,9 @@ export default function ChatForm({user_uuid}: {user_uuid?: string}) {
             </a>
           </span>
         );
-      } else{
-        assistantContent = "Sorry, something went wrong. Could you please try again after some time?";
+      } else {
+        assistantContent =
+          "Sorry, something went wrong. Could you please try again after some time?";
       }
 
       setMessages((prev) => [
